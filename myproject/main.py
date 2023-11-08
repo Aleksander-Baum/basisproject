@@ -34,8 +34,10 @@ def read_restaurants(skip: int = 0, limit: int = 100, db: Session = Depends(get_
 @app.get("/restaurants/{restaurant_id}", response_model=schemas.Restaurant)
 def read_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
     db_restaurant = crud.get_restaurant(db, restaurant_id=restaurant_id)
+
     if db_restaurant is None:
-        raise HTTPException(status_code=404, detail="User not found")
+        raise HTTPException(status_code=404, detail="Restaurant not found")
+
     return db_restaurant
 
 @app.post("/owners", response_model=schemas.Owner)
@@ -45,6 +47,7 @@ def create_owner(owner: schemas.OwnerCreate, db: Session = Depends(get_db)):
 @app.get("/owners/", response_model=list[schemas.Owner])
 def read_owners(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     owners = crud.get_owners(db, skip, limit)
+
     return owners
 
 @app.post("/menuitems", response_model=schemas.MenuItem)
@@ -54,4 +57,17 @@ def create_menu_item(menu_item: schemas.MenuItemCreate, db: Session = Depends(ge
 @app.get("/menuitems/{restaurant_id}", response_model=list[schemas.MenuItem])
 def read_menu_items(restaurant_id: int, db: Session = Depends(get_db)):
     menu_items = crud.get_menu_items(db, restaurant_id)
+
+    if not menu_items:
+        raise HTTPException(status_code=404, detail="Restaurant not found")
+
     return menu_items
+
+@app.delete("/restaurants/{restaurant_id}/menuitems/{menu_item_id}", response_model=schemas.MenuItem)
+def delete_menu_item(restaurant_id: int, menu_item_id: int, db: Session = Depends(get_db)):
+    deleted_menu_item = crud.delete_menu_item(db, restaurant_id, menu_item_id)
+
+    if deleted_menu_item is None:
+        raise HTTPException(status_code=404, detail="Restaurant or menu not found")
+
+    return deleted_menu_item

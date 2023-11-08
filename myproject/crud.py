@@ -36,8 +36,8 @@ def create_menu_item(db: Session, menu_item: schemas.MenuItemCreate):
     db.refresh(db_menu_item)
     return db_menu_item
 
-def delete_menu_item(db: Session, menu_item_id: int):
-    db_menu_item = db.query(models.MenuItem).filter(models.MenuItem.id == menu_item_id).first()
+def delete_menu_item(db: Session, restaurant_id: int, menu_item_id: int):
+    db_menu_item = db.query(models.MenuItem).filter(models.MenuItem.id == menu_item_id, models.MenuItem.restaurant_id == restaurant_id).first()
     if db_menu_item:
         db.delete(db_menu_item)
         db.commit()
