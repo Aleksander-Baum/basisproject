@@ -8,4 +8,4 @@ services:
     - restaurant_data:/code/sqlitedb
 
 volumes:
-  restaurant_service:
+  restaurant_data:
