@@ -24,7 +24,6 @@ class OwnerCreate(OwnerBase):
 
 class Owner(OwnerBase):
     id: int
-    restaurants: list[Restaurant] = []
 
     class Config:
         orm_mode = True
@@ -40,7 +39,6 @@ class MenuItemCreate(MenuItemBase):
 
 class MenuItem(MenuItemBase):
     id: int
-    restaurants: list[Restaurant] = []
 
     class Config:
         orm_mode = True

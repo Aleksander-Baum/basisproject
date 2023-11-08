@@ -12,8 +12,6 @@ class Restaurant(Base):
     address = Column(String, index=True)
     rating = Column(Float, index=True)
 
-    items = relationship("MenuItem", back_populates="restaurants")
-
 class Owner(Base):
     __tablename__ = "owners"
 
@@ -29,7 +27,4 @@ class MenuItem(Base):
     item_name = Column(String, index=True)
     description = Column(String, index=True)
     price = Column(Float, index=True)
-
     restaurant_id = Column(Integer, ForeignKey("restaurants.id"))
-
-    restaurants = relationship("Restaurant", back_populates="items")

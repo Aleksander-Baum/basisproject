@@ -37,3 +37,21 @@ def read_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
     if db_restaurant is None:
         raise HTTPException(status_code=404, detail="User not found")
     return db_restaurant
+
+@app.post("/owners", response_model=schemas.Owner)
+def create_owner(owner: schemas.OwnerCreate, db: Session = Depends(get_db)):
+    return crud.create_owner(db=db, owner=owner)
+
+@app.get("/owners/", response_model=list[schemas.Owner])
+def read_owners(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    owners = crud.get_owners(db, skip, limit)
+    return owners
+
+@app.post("/menuitems", response_model=schemas.MenuItem)
+def create_menu_item(menu_item: schemas.MenuItemCreate, db: Session = Depends(get_db)):
+    return crud.create_menu_item(db=db, menu_item=menu_item)
+
+@app.get("/menuitems/{restaurant_id}", response_model=list[schemas.MenuItem])
+def read_menu_items(restaurant_id: int, db: Session = Depends(get_db)):
+    menu_items = crud.get_menu_items(db, restaurant_id)
+    return menu_items

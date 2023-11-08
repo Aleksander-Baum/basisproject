@@ -17,12 +17,8 @@ def create_restaurant(db: Session, restaurant:schemas.RestaurantCreate):
     db.refresh(db_restaurant)
     return db_restaurant
 
-def get_owner(db: Session, owner_id: int):
-    return db.query(models.Owner).filter(models.Owner.id == owner_id).first()
-
-def get_owners(db: Session):
-    return db.query(models.Owner).all()
-
+def get_owners(db: Session, skip:int = 0, limit: int = 100):
+    return db.query(models.Owner).offset(skip).limit(limit).all()
 def create_owner(db: Session, owner:schemas.OwnerCreate):
     db_owner = models.Owner(**owner.dict())
     db.add(db_owner)
