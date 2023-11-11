@@ -4,11 +4,14 @@ services:
   image: r0930134/basisproject
   ports:
     - "8000:8000"
-  volumes:
-    - restaurant_data:/code/mysqldb
-  environment:
-    MYSQL_ROOT_PASSWORD: abc123!
-    MYSQL_DATABASE: restaurantdb
+
+ mysql:
+   image: mysql:latest
+    volumes:
+      - restaurant-data:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: abc123!
+      MYSQL_DATABASE: restaurantdb
 
 volumes:
   restaurant_data:
