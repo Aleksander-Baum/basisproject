@@ -6,12 +6,12 @@ services:
     - "8000:8000"
 
  mysql:
-   image: mysql:latest
-    volumes:
-      - restaurant-data:/var/lib/mysql
-    environment:
-      MYSQL_ROOT_PASSWORD: abc123!
-      MYSQL_DATABASE: restaurantdb
+  image: mysql:latest
+  volumes:
+    - restaurant-data:/code/mysqldb
+  environment:
+    MYSQL_ROOT_PASSWORD: your_password
+    MYSQL_DATABASE: your_database
 
 volumes:
   restaurant_data:
