@@ -5,7 +5,7 @@ services:
   ports:
     - "8000:8000"
   volumes:
-    - restaurant_data:/code/sqlitedb
+    - restaurant_data:/code/mysqldb
 
 volumes:
   restaurant_data:
