@@ -10,8 +10,8 @@ services:
   volumes:
     - restaurant-data:/code/mysqldb
   environment:
-    MYSQL_ROOT_PASSWORD: your_password
-    MYSQL_DATABASE: your_database
+    MYSQL_ROOT_PASSWORD: abc123!
+    MYSQL_DATABASE: restaurantdb
 
 volumes:
   restaurant_data:
