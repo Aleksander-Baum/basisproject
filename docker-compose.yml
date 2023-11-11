@@ -6,7 +6,7 @@ services:
     - "8000:8000"
   volumes:
     - restaurant_data:/code/mysqldb
-   environment:
+  environment:
     MYSQL_ROOT_PASSWORD: abc123!
     MYSQL_DATABASE: restaurantdb
 
