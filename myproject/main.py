@@ -8,8 +8,8 @@ import schemas
 import crud
 from database import SessionLocal, engine
 
-if not os.path.exists('.\sqlitedb'):
-    os.makedirs('.\sqlitedb')
+if not os.path.exists('.\mysqldb'):
+    os.makedirs('.\mysqldb')
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -59,7 +59,7 @@ def read_menu_items(restaurant_id: int, db: Session = Depends(get_db)):
     menu_items = crud.get_menu_items(db, restaurant_id)
 
     if not menu_items:
-        raise HTTPException(status_code=404, detail="Restaurant not found")
+        raise HTTPException(status_code=404, detail="Restaurant not found or no items on menu")
 
     return menu_items
 
