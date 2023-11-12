@@ -37,7 +37,7 @@
                 rating: formData.get('rating'),
             };
 
-            const response = await fetch('http://127.0.0.1:8000/restaurant/', {
+            const response = await fetch('http://0.0.0.0:8000/restaurant/', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -54,7 +54,7 @@
         }
 
         async function getRestaurants() {
-            const response = await fetch('http://127.0.0.1:8000/restaurants/');
+            const response = await fetch('http://0.0.0.0:8000/restaurants/');
             const data = await response.json();
 
             const restaurantList = document.getElementById('restaurants-list');
