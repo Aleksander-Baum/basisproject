@@ -29,6 +29,9 @@ Zoals hiervoor vermeld had ik verkozen SQLite te vervangen door MySQL om wat ext
 
 Hierbij heb ik ook nog een simpele front-end toegevoegd. Je kan hier alle simpele functies uitvoeren: restaurant, owner, en menu item toevoegen. Alle restaurants en owners worden automatisch getoond en menu items kan je krijgen door een restaurant id in te vullen.
 
+### Simple Frontend
+![frontend](https://github.com/Aleksander-Baum/basisproject/assets/113974461/150077e9-5163-4012-9edc-461de69f499c)
+
 ## Werking API Postman
 ### Create restaurant
 ![1Add Restaurant](https://github.com/Aleksander-Baum/basisproject/assets/113974461/81421410-b82a-4ca9-b4a2-942a3208973c)
