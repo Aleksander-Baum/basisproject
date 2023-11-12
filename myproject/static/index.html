@@ -11,7 +11,7 @@
     <ul id="restaurants-list"></ul>
 
     <h2>Add restaurant</h2>
-    <form id="create-form">
+    <form id="restaurant-form">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
 
@@ -22,6 +22,50 @@
         <input type="float" id="rating" name="rating" required>
 
         <button type="submit">Add restaurant</button>
+    </form>
+
+    <h2>All owners</h2>
+    <ul id="owners-list"></ul>
+
+    <h2>Add owner</h2>
+    <form id="owner-form">
+        <label for="ownername">Name:</label>
+        <input type="text" id="ownername" name="ownername" required>
+
+        <label for="telephone">Telephone:</label>
+        <input type="text" id="telephone" name="telephone" required>
+
+        <label for="restaurant_id">Restaurant ID:</label>
+        <input type="number" id="restaurant_id" name="restaurant_id" required>
+
+        <button type="submit">Add owner</button>
+    </form>
+
+    <h2>Menu items from restaurant</h2>
+    <div id="getrestaurantitem-form">
+        <label for="get_restaurant_id">Restaurant ID:</label>
+        <input type="number" id="get_restaurant_id" name="get_restaurant_id" required>
+
+        <button onclick="getMenuItemsFromID()">Get items from restaurant</button>
+    </div>
+
+    <ul id="restaurant-item-list"></ul>
+
+    <h2>Add menu item</h2>
+    <form id="restaurantitem-form">
+        <label for="item_name">Item Name:</label>
+        <input type="text" id="item_name" name="item_name" required>
+
+        <label for="description">Description:</label>
+        <input type="text" id="description" name="description" required>
+
+        <label for="price">Price:</label>
+        <input type="float" id="price" name="price" required>
+
+        <label for="item_restaurant_id">Restaurant ID:</label>
+        <input type="number" id="item_restaurant_id" name="item_restaurant_id" required>
+
+        <button type="submit">Add menu item</button>
     </form>
 
     <script>
@@ -62,15 +106,105 @@
 
             data.forEach(restaurant => {
                const listRestaurant = document.createElement('li');
-               listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating}`;
+               listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating} - ID: ${restaurant.id}`;
 
                restaurantList.appendChild(listRestaurant)
             });
         }
 
-        document.getElementById('create-form').addEventListener('submit', createRestaurant);
+        async function createOwner(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const data = {
+                name: formData.get('ownername'),
+                telephone: formData.get('telephone'),
+                restaurant_id: formData.get('restaurant_id'),
+            };
+
+            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/owner/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                form.reset();
+                getOwners();
+            } else {
+                console.error('Failed to create owner');
+            }
+        }
+
+        async function getOwners() {
+            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/owners/');
+            const data = await response.json();
+
+            const ownerList = document.getElementById('owners-list');
+            ownerList.innerHTML = '';
+
+            data.forEach(owner => {
+               const listOwner = document.createElement('li');
+               listOwner.textContent = `Owner name: ${owner.name} - Telephone: ${owner.telephone} - Restaurant ID: ${owner.restaurant_id}`;
+
+               ownerList.appendChild(listOwner)
+            });
+        }
+
+        async function createMenuItem(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const data = {
+                item_name: formData.get('item_name'),
+                description: formData.get('description'),
+                price: formData.get('price'),
+                restaurant_id: formData.get('item_restaurant_id'),
+            };
+
+            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/menuitem/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                form.reset();
+            } else {
+                console.error('Failed to create menu item');
+            }
+        }
+
+        async function getMenuItemsFromID() {
+            const response = await fetch('https://restaurant-service-aleksander-baum.cloud.okteto.net/menuitems/'+document.getElementById('get_restaurant_id').value);
+            const data = await response.json();
+            console.log(data);
+
+            const itemList = document.getElementById('restaurant-item-list');
+            itemList.innerHTML = '';
+
+            data.forEach(item => {
+               const listItem = document.createElement('li');
+               listItem.textContent = `Menu item name: ${item.item_name} - Description: ${item.description} - Price: ${item.price}`;
+
+               itemList.appendChild(listItem)
+            });
+        }
+
+        document.getElementById('restaurant-form').addEventListener('submit', createRestaurant);
+        document.getElementById('owner-form').addEventListener('submit', createOwner);
+        document.getElementById('restaurantitem-form').addEventListener('submit', createMenuItem);
 
         getRestaurants()
+        getOwners()
     </script>
 </body>
 </html>
