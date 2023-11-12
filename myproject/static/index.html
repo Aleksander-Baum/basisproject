@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Basisproject frontend</title>
+</head>
+<body>
+    <h1>Restaurant Frontend</h1>
+
+    <h2>All restaurants</h2>
+    <ul id="restaurants-list"></ul>
+
+    <h2>Add restaurant</h2>
+    <form id="create-form">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" name="address" required>
+
+        <label for="rating">Rating:</label>
+        <input type="float" id="rating" name="rating" required>
+
+        <button type="submit">Add restaurant</button>
+    </form>
+
+    <script>
+        async function createRestaurant(event) {
+            event.preventDefault();
+
+            const form = event.target;
+            const formData = new FormData(form);
+
+            const data = {
+                name: formData.get('name'),
+                address: formData.get('address'),
+                rating: formData.get('rating'),
+            };
+
+            const response = await fetch('http://127.0.0.1:8000/restaurant/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+
+            if (response.ok) {
+                form.reset();
+                getRestaurants();
+            } else {
+                console.error('Failed to create item');
+            }
+        }
+
+        async function getRestaurants() {
+            const response = await fetch('http://127.0.0.1:8000/restaurants/');
+            const data = await response.json();
+
+            const restaurantList = document.getElementById('restaurants-list');
+            restaurantList.innerHTML = '';
+
+            data.forEach(restaurant => {
+               const listRestaurant = document.createElement('li');
+               listRestaurant.textContent = `Restaurant name: ${restaurant.name} - Address: ${restaurant.address} - Rating: ${restaurant.rating}`;
+
+               restaurantList.appendChild(listRestaurant)
+            });
+        }
+
+        document.getElementById('create-form').addEventListener('submit', createRestaurant);
+
+        getRestaurants()
+    </script>
+</body>
+</html>

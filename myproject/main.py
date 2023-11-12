@@ -2,6 +2,8 @@ import os
 
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
+from starlette.responses import HTMLResponse, FileResponse
+from starlette.staticfiles import StaticFiles
 
 import models
 import schemas
@@ -15,6 +17,8 @@ models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 def get_db():
     db = SessionLocal()
     try:
@@ -22,7 +26,11 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/restaurants", response_model=schemas.Restaurant)
+@app.get("/", response_class=HTMLResponse)
+def read_root():
+    return FileResponse("static/index.html")
+
+@app.post("/restaurant/", response_model=schemas.Restaurant)
 def create_restaurant(restaurant: schemas.RestaurantCreate, db: Session = Depends(get_db)):
     return crud.create_restaurant(db=db, restaurant=restaurant)
 
@@ -40,7 +48,7 @@ def read_restaurants(restaurant_id: int, db: Session = Depends(get_db)):
 
     return db_restaurant
 
-@app.post("/owners", response_model=schemas.Owner)
+@app.post("/owner/", response_model=schemas.Owner)
 def create_owner(owner: schemas.OwnerCreate, db: Session = Depends(get_db)):
     return crud.create_owner(db=db, owner=owner)
 
@@ -50,7 +58,7 @@ def read_owners(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
     return owners
 
-@app.post("/menuitems", response_model=schemas.MenuItem)
+@app.post("/menuitem/", response_model=schemas.MenuItem)
 def create_menu_item(menu_item: schemas.MenuItemCreate, db: Session = Depends(get_db)):
     return crud.create_menu_item(db=db, menu_item=menu_item)
 
